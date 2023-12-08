@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  leaflet:
+    specifier: ^1.9.4
+    version: registry.npmmirror.com/leaflet@1.9.4
   vue:
     specifier: ^3.3.8
     version: registry.npmmirror.com/vue@3.3.11(typescript@5.3.3)
@@ -678,6 +681,12 @@ packages:
     version: 1.2.0
     hasBin: true
     dev: true
+
+  registry.npmmirror.com/leaflet@1.9.4:
+    resolution: {integrity: sha512-nxS1ynzJOmOlHp+iL3FyWqK89GtNL8U8rvlMOsQdTTssxZwCXh8N2NB3GDQOL+YR3XnWyZAxwQixURb+FA74PA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/leaflet/-/leaflet-1.9.4.tgz}
+    name: leaflet
+    version: 1.9.4
+    dev: false
 
   registry.npmmirror.com/lru-cache@6.0.0:
     resolution: {integrity: sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/lru-cache/-/lru-cache-6.0.0.tgz}
