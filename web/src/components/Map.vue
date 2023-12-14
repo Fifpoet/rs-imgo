@@ -9,7 +9,7 @@ export default {
   data() {
     return {
       map: null,
-      OSMUrl: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      OSMUrl: "http://localhost:8888/v1/map/{z}/{x}/{y}"
     };
   },
   mounted() {
