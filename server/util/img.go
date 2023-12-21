@@ -96,3 +96,11 @@ func ResizeImg(imgP string) {
 	}
 	fmt.Println("图像重采样完成")
 }
+
+func DecomposeTiff(tiffPath string, outPath string) {
+	rgba, err := ExtractMaxSquare(tiffPath, outPath+"tiff.png")
+	if err != nil {
+		return
+	}
+	DecomposeSquare(rgba, rgba.Bounds().Dx(), 0, 0, outPath, "")
+}
