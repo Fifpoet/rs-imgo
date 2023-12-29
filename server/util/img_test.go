@@ -14,7 +14,7 @@ func TestJoinImages(t *testing.T) {
 }
 
 func TestDecomposeTiff(t *testing.T) {
-	tiff := "/home/fifpoet/Downloads/files/default/file_example_TIFF_10MB.tiff"
+	tiff := "/home/fifpoet/Desktop/go_project/rs-imgo/server/static/img/gf2-321.jpg"
 	out := "/home/fifpoet/Desktop/go_project/rs-imgo/server/static/output/"
 	DecomposeTiff(tiff, out)
 }

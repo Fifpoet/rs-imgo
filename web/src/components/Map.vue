@@ -15,10 +15,10 @@ export default {
   mounted() {
     this.map = this.$utils.map.createMap("map-container");
     // 设施地图视图 中心位置
-    this.map.setView([30.35, 114.18], 13);
+    this.map.setView([30.35, 114.18], 5);
 
     // 加载 open street map和mapbox 图层服务
-    this.$utils.map.createTileLayer(this.map, this.OSMUrl, {maxZoom: 19});
+    this.$utils.map.createTileLayer(this.map, this.OSMUrl, {maxZoom: 8, minZoom: 2});
   }
 };
 </script>

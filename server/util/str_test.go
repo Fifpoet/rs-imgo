@@ -3,7 +3,7 @@ package util
 import "testing"
 
 func TestTileXY2QuadKey(t *testing.T) {
-	code := TileXY2QuadKey(2, 2, 2)
+	code := TileXY2QuadKey(8, 8, 4)
 	println(code)
 }
 

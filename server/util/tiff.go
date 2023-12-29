@@ -5,9 +5,11 @@ import (
 	"golang.org/x/image/draw"
 	"golang.org/x/image/tiff"
 	"image"
+	"image/jpeg"
 	"image/png"
 	"log"
 	"os"
+	"path/filepath"
 )
 
 type Coordinate struct {
@@ -22,10 +24,23 @@ func ExtractMaxSquare(tiffPath, out string) (*image.RGBA, error) {
 		return nil, err
 	}
 	defer file.Close()
-	img, err := tiff.Decode(file)
+	fileExt := filepath.Ext(tiffPath)
+	// 根据后缀选择合适的图像解码器
+	var img image.Image
+	switch fileExt {
+	case ".jpg", ".jpeg":
+		img, err = jpeg.Decode(file)
+	case ".png":
+		img, err = png.Decode(file)
+	case ".tiff", ".tif":
+		img, err = tiff.Decode(file)
+	default:
+		err = fmt.Errorf("不支持的图像格式")
+	}
 	if err != nil {
 		return nil, err
 	}
+
 	// 获取原始图像尺寸
 	bounds := img.Bounds()
 	width := bounds.Max.X
@@ -63,10 +78,10 @@ func DecomposeSquare(img *image.RGBA, size, x0, y0 int, curPath string, code str
 			CreateDir(fmt.Sprintf("%s%d", curPath, i))
 		}
 	}
-	DecomposeSquare(img, subsize, 0, 0, curPath+"0/", code+"0")
-	DecomposeSquare(img, subsize, subsize, 0, curPath+"1/", code+"1")
-	DecomposeSquare(img, subsize, 0, subsize, curPath+"2/", code+"2")
-	DecomposeSquare(img, subsize, subsize, subsize, curPath+"3/", code+"3")
+	DecomposeSquare(img, subsize, x0, y0, curPath+"0/", code+"0")
+	DecomposeSquare(img, subsize, x0+subsize, y0, curPath+"1/", code+"1")
+	DecomposeSquare(img, subsize, x0, y0+subsize, curPath+"2/", code+"2")
+	DecomposeSquare(img, subsize, x0+subsize, y0+subsize, curPath+"3/", code+"3")
 	return
 }
 
@@ -76,7 +91,6 @@ func StoreSubSquare(img *image.RGBA, size, x0, y0 int, curPath string, code stri
 	subsize := size >> 1
 	coors := []Coordinate{{x: x0, y: y0}, {x: x0 + subsize, y: y0}, {x: x0, y: y0 + subsize}, {x: x0 + subsize, y: y0 + subsize}}
 	for i := range coors {
-		//TODO 不能直接使用copy对象
 		coors[i].output = fmt.Sprintf("%s%s%d.png", curPath, code, i)
 	}
 	for _, c := range coors {

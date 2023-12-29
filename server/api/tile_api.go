@@ -20,6 +20,5 @@ func GetTilePNG(c *gin.Context) {
 	//四进制编码
 	quadKey := util.TileXY2QuadKey(x, y, z)
 	imgPath := base + util.QuadKey2ImgPath(quadKey)
-	c.JSON(200, imgPath)
 	c.File(imgPath)
 }
