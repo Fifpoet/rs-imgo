@@ -5,8 +5,10 @@ import (
 	"golang.org/x/image/draw"
 	"golang.org/x/image/tiff"
 	"image"
+	"image/color"
 	"image/jpeg"
 	"image/png"
+	"io"
 	"log"
 	"os"
 	"path/filepath"
@@ -43,6 +45,8 @@ func ExtractMaxSquare(tiffPath, out string) (*image.RGBA, error) {
 
 	// 获取原始图像尺寸
 	bounds := img.Bounds()
+	//r, g, b, a := img.At(0, 0).RGBA() 原始图像有黑边
+	//log.Printf("xxxxxx %d %d %d %d", r, g, b, a)
 	width := bounds.Max.X
 	height := bounds.Max.Y
 	// 计算最大正方形的边长
@@ -102,10 +106,23 @@ func StoreSubSquare(img *image.RGBA, size, x0, y0 int, curPath string, code stri
 		if err != nil {
 			log.Fatalf("创建%s文件失败：%s\n", c.output, err.Error())
 		}
-		err = png.Encode(file, dstNearest)
+		//利用jpeg压缩图片
+		err = compressImageResource(dstNearest, file)
 		if err != nil {
-			log.Fatalf("绘制略缩图失败：%s\n", err.Error())
+			log.Fatalf("图片压缩或写入失败：%s\n", err.Error())
 		}
 		file.Close()
 	}
+}
+
+// 无质量压缩：demo图片体积
+func compressImageResource(imgSrc image.Image, file io.Writer) error {
+	newImg := image.NewRGBA(imgSrc.Bounds())
+	draw.Draw(newImg, newImg.Bounds(), &image.Uniform{C: color.White}, image.Point{}, draw.Src)
+	draw.Draw(newImg, newImg.Bounds(), imgSrc, imgSrc.Bounds().Min, draw.Over)
+	err := jpeg.Encode(file, newImg, &jpeg.Options{Quality: 40})
+	if err != nil {
+		return err
+	}
+	return nil
 }
