@@ -3,8 +3,11 @@ package api
 import (
 	"github.com/gin-gonic/gin"
 	"log"
+	"net/http"
 	"rs-imgo/global"
+	"rs-imgo/infra"
 	"rs-imgo/util"
+	"strconv"
 )
 
 func GetTilePNG(c *gin.Context) {
@@ -20,5 +23,12 @@ func GetTilePNG(c *gin.Context) {
 	//四进制编码
 	quadKey := util.TileXY2QuadKey(x, y, z)
 	imgPath := base + util.QuadKey2ImgPath(quadKey)
-	c.File(imgPath)
+	key := global.ZsetKeyPrefix + strconv.Itoa(len(quadKey))
+	pngs := infra.QueryPngByScore(key, quadKey)
+	if len(pngs) == 1 {
+		c.String(http.StatusOK, pngs[0])
+	} else {
+		score, _ := strconv.Atoi(quadKey)
+		infra.ZAddBatchPng(key, []string{imgPath}, []int{score})
+	}
 }

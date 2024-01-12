@@ -8,4 +8,6 @@ var (
 	MinScale = 1
 	MaxScale = 5
 	ImgPath  = "/home/fifpoet/Desktop/go_project/rs-imgo/server/static/output/"
+
+	ZsetKeyPrefix = "tile_"
 )
