@@ -63,6 +63,6 @@ func QueryPngByScore(key string, score string) []string {
 	if err != nil {
 		log.Fatal("QueryPngByScore错误")
 	}
-	log.Printf("QueryPngByScore: req {key: %v, score: %v} res {%v}", key, score, pngs)
+	log.Printf("QueryPngByScore: req {key: %v, score: %v} resLen {%v}", key, score, len(pngs))
 	return pngs
 }

@@ -24,7 +24,7 @@ func TestMain(m *testing.M) {
 
 func TestZAddBatchPng(t *testing.T) {
 	key := global.ZsetKeyPrefix + "4"
-	ZAddBatchPng(key, []string{"/home/fifpoet/Desktop/go_project/rs-imgo/server/static/output/0/1/2/0120.png"}, []int{1111})
+	ZAddBatchPng(key, []string{"/home/fifpoet/Desktop/go_project/rs-imgo/server/static/output/1/1/0/1101.png"}, []int{1101})
 }
 
 func TestQueryPngByScore(t *testing.T) {
