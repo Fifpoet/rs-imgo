@@ -27,19 +27,13 @@ export default {
       let mapIns = ev.sourceTarget
       let center = mapIns.getCenter();
       let scale = mapIns.getZoom();
-      let xy = latLongToTileXY(center.lat, center.lng, scale)
-      if(mapIns.TileX - xy[0] !== 0) {
-        sendGet(mapIns.XChangeUrl+(mapIns.TileX - xy[0]))
-        //驱动map更新XY
+      let xy = latLongToTileXY(center.lat, center.lng, scale) //TODO 私服xy转换
+      if(mapIns.TileX - xy[0] !== 0 || mapIns.TileY - xy[1] !== 0) {
+        console.log("map移动 更新缓存: ", mapIns.TileX - xy[0], mapIns.TileY - xy[1])
+        sendGet("xxx")
       }
-      if(mapIns.TileY - xy[1] !== 0) {
-        sendGet(mapIns.YChangeUrl+(mapIns.TileY - xy[1]))
-      }
-
     })
-    // 加载 open street map和mapbox 图层服务
     this.$utils.map.createTileLayer(this.map, this.OSMUrl, {maxZoom: 8, minZoom: 2});
-
   },
 
 };

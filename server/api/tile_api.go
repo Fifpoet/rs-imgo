@@ -24,6 +24,7 @@ func GetTilePNG(c *gin.Context) {
 	quadKey := util.TileXY2QuadKey(x, y, z)
 	imgPath := base + util.QuadKey2ImgPath(quadKey)
 	key := global.ZsetKeyPrefix + strconv.Itoa(len(quadKey))
+
 	pngs := infra.QueryPngByScore(key, quadKey)
 	if len(pngs) == 1 {
 		pngBytes, _ := base64.StdEncoding.DecodeString(pngs[0])
