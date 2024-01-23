@@ -17,8 +17,9 @@ func GetTilePNG(c *gin.Context) {
 	base := global.ImgPath
 	maxXY := 2<<z - 1
 	if x > maxXY || y > maxXY || z > global.MaxScale {
-		c.Data(http.StatusOK, "image/png", []byte{})
+		c.Data(http.StatusInternalServerError, "image/png", []byte{})
 		c.Abort()
+		return
 	}
 	//四进制编码
 	quadKey := util.TileXY2QuadKey(x, y, z)

@@ -8,19 +8,22 @@ import (
 )
 
 func UpdateCache(c *gin.Context) {
-	user := c.Query("user-code")
-	x := c.Query("x")
-	y := c.Query("y")
+	user := c.Query("user")
+	z := util.Str2Int(c.Param("z"))
+	x := util.Str2Int(c.Param("x"))
+	y := util.Str2Int(c.Param("y"))
 	if user == "" {
-		c.JSON(http.StatusBadRequest, "no user code")
+		c.JSON(http.StatusOK, "no user code")
 		c.Abort()
+		return
 	}
 	//添加到context
 	infra.StoreUserState(util.Str2Int(user), infra.UserState{
 		Height:  8,
 		Width:   8,
-		CenterX: util.Str2Int(x),
-		CenterY: util.Str2Int(y),
+		CenterX: x,
+		CenterY: y,
+		Scale:   z,
 		Meta:    nil,
 	})
 	c.JSON(http.StatusOK, "OK")

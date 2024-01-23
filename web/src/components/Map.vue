@@ -4,7 +4,8 @@
 
 <script>
 import {latLongToTileXY} from "../utils/latlng.ts";
-import {sendGet} from "../api/movemap.ts";
+import {CacheUpdate} from "../api/movemap.ts";
+import {getUserCode} from "../lstore/user";
 
 export default {
   name: "mapView",
@@ -13,10 +14,6 @@ export default {
     return {
       map: null,
       OSMUrl: "http://192.168.132.128:8888/v1/map/{z}/{x}/{y}",
-      XChangeUrl: "",
-      YChangeUrl: "",
-      TileX: 0,
-      TileY: 0
     };
   },
   mounted() {
@@ -27,11 +24,12 @@ export default {
       let mapIns = ev.sourceTarget
       let center = mapIns.getCenter();
       let scale = mapIns.getZoom();
-      let xy = latLongToTileXY(center.lat, center.lng, scale) //TODO 私服xy转换
-      if(mapIns.TileX - xy[0] !== 0 || mapIns.TileY - xy[1] !== 0) {
-        console.log("map移动 更新缓存: ", mapIns.TileX - xy[0], mapIns.TileY - xy[1])
-        sendGet("xxx")
-      }
+      let xy = latLongToTileXY(center.lat, center.lng, scale) //经纬度转换成Tile值
+      // 暂时不知道怎么从事件回调中拿到center状态， 所以状态存到后端， 每次moveend发送请求
+      let userCode = getUserCode()
+      console.log(`http://192.168.132.128:8888/v1/cache/${scale}/${xy[0]}/${xy[1]}?user=${userCode}`)
+
+      CacheUpdate(`http://192.168.132.128:8888/v1/cache/${scale}/${xy[0]}/${xy[1]}?user=${userCode}`)
     })
     this.$utils.map.createTileLayer(this.map, this.OSMUrl, {maxZoom: 8, minZoom: 2});
   },

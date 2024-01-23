@@ -19,7 +19,7 @@ export const sendPost = async (url: string, data: any): Promise<ResponseData> =>
 };
 
 // 封装发送 GET 请求的函数
-export const sendGet = async (url: string): Promise<ResponseData> => {
+export const CacheUpdate = async (url: string): Promise<ResponseData> => {
     try {
         const response = await axios.get(url);
         return response.data;
