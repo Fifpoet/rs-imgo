@@ -2,10 +2,9 @@ package infra
 
 import (
 	"context"
-	"encoding/base64"
 	"github.com/redis/go-redis/v9"
 	"log"
-	"os"
+	"rs-imgo/util"
 )
 
 var rc *redis.Client
@@ -31,7 +30,7 @@ func ZAddBatchPng(key string, imgPaths []string, scores []int) int64 {
 		log.Printf("ZAddBatchPng成功缓存{%v}张图片, key:{%v}, imgPaths:{%v}, scores:{%v}", len(imgPaths), key, imgPaths, scores)
 	}
 	if err != nil {
-		log.Fatal("xxx")
+		log.Fatal("ZAddBatchPng error")
 	}
 	return res
 }
@@ -44,11 +43,7 @@ func genZAddReq(imgPaths []string, scores []int) []redis.Z {
 	res := make([]redis.Z, l)
 
 	for i := 0; i < l; i++ {
-		bs, err := os.ReadFile(imgPaths[i])
-		if err != nil {
-			panic(err)
-		}
-		b64 := base64.StdEncoding.EncodeToString(bs)
+		b64 := util.PathToB64(imgPaths[i])
 		res[i] = redis.Z{Score: float64(scores[i]), Member: b64}
 	}
 	return res
@@ -65,4 +60,26 @@ func QueryPngByScore(key string, score string) []string {
 	}
 	log.Printf("QueryPngByScore: req {key: %v, score: %v} resLen {%v}", key, score, len(pngs))
 	return pngs
+}
+
+func QueryPngByField(key, field string) string {
+	res, err := rc.HGet(context.Background(), key, field).Result()
+	if err == redis.Nil {
+		log.Printf("QueryPngByField dict key not exisit")
+	} else if err != nil {
+		log.Fatal("QueryPngByField error", err)
+	}
+	return res
+}
+
+func HAddPng(key string, imgPath string, field string) int64 {
+	b64 := util.PathToB64(imgPath)
+	res, err := rc.HSet(context.Background(), key, field, b64).Result()
+	if res > 0 {
+		log.Printf("HAddPng 成功缓存{%v}张图片, key:{%v}, imgPath:{%v}", len(imgPath), key, imgPath)
+	}
+	if err != nil {
+		log.Fatal("HAddPng错误")
+	}
+	return res
 }

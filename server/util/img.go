@@ -1,6 +1,7 @@
 package util
 
 import (
+	"encoding/base64"
 	"fmt"
 	"github.com/disintegration/imaging"
 	"image"
@@ -103,4 +104,10 @@ func DecomposeTiff(tiffPath string, outPath string) {
 		return
 	}
 	DecomposeSquare(rgba, rgba.Bounds().Dx(), 0, 0, outPath, "")
+}
+
+func PathToB64(path string) string {
+	bs, _ := os.ReadFile(path)
+	b64 := base64.StdEncoding.EncodeToString(bs)
+	return b64
 }

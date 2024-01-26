@@ -11,6 +11,7 @@ import (
 func setup() {
 	fmt.Println("redis_test setup")
 	InitRedis()
+	InitMysql()
 }
 
 // 测试函数

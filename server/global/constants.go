@@ -10,4 +10,5 @@ var (
 	ImgPath  = "/home/fifpoet/Desktop/go_project/rs-imgo/server/static/output/"
 
 	ZsetKeyPrefix = "tile_"
+	HashKeyPrefix = "hashTile_"
 )
