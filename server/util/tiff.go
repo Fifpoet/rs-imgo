@@ -14,13 +14,42 @@ import (
 	"path/filepath"
 )
 
+type IImageDecomposer interface {
+	ExtractMaxSquare(tiffPath, out string) (*image.RGBA, error)
+	ExtractMutiImagesAndLatLng(imgPath []string, ll []LatLng, out string) (*image.RGBA, error)
+}
+
+type ImageDecomposer struct {
+	globalLatLng LatLng      //整個底圖的範圍信息
+	baseImage    *image.RGBA //底圖
+	hasPixel     [][]bool    //標識底圖對應座標有無像素點
+}
+
+// NewImageDecomposer path只有一個時，不用初始化底圖；多個時，計算像素矩陣並初始化
+func NewImageDecomposer(path []string, ll ...LatLng) IImageDecomposer {
+	ImgDec := &ImageDecomposer{}
+	if len(path) == 1 {
+		return ImgDec
+	}
+	//TODO
+	return ImgDec
+}
+
+type LatLng struct {
+	minLat float32
+	minLng float32
+	maxLat float32
+	maxLng float32
+}
+
 type Coordinate struct {
 	x      int
 	y      int
 	output string
 }
 
-func ExtractMaxSquare(tiffPath, out string) (*image.RGBA, error) {
+// ExtractMaxSquare 提取最大原始圖像中的正方形
+func (i *ImageDecomposer) ExtractMaxSquare(tiffPath, out string) (*image.RGBA, error) {
 	file, err := os.Open(tiffPath)
 	if err != nil {
 		return nil, err
@@ -125,4 +154,9 @@ func compressImageResource(imgSrc image.Image, file io.Writer) error {
 		return err
 	}
 	return nil
+}
+
+func (i *ImageDecomposer) ExtractMutiImagesAndLatLng(imgPath []string, ll []LatLng, out string) (*image.RGBA, error) {
+
+	return nil, nil
 }

@@ -99,7 +99,7 @@ func ResizeImg(imgP string) {
 }
 
 func DecomposeTiff(tiffPath string, outPath string) {
-	rgba, err := ExtractMaxSquare(tiffPath, outPath+"tiff.png")
+	rgba, err := imageDecomposer.ExtractMaxSquare(tiffPath, outPath+"tiff.png")
 	if err != nil {
 		return
 	}
